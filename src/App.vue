@@ -1,29 +1,38 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div id="app" class="grid">
+ <Bar></Bar>
+    <router-view>
+      <router-link to="/"><SubmitSchedule></SubmitSchedule></router-link>|
+      <router-link to="/notice"></router-link>
+      <router-link to="/medal"></router-link>
+    </router-view>
   </div>
 </template>
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
+
+</style>
+
+<script>
+import Bar from '@/components/Bar'
+import SubmitSchedule from '@/components/SubmitSchedule'
+export default {
+  data:function(){
+    return{
+
     }
+  },
+  methods:{},
+  components:{
+    SubmitSchedule,
+    Bar
   }
 }
-</style>
+</script>
