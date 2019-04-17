@@ -11,11 +11,20 @@
       </template>
     </mu-data-table>
   </mu-paper>
+
+  <mu-flex justify-content="center" class="pag">
+    <mu-pagination raised circle :total="1000" :current.sync="current"></mu-pagination>
+  </mu-flex>
+
 </mu-container>
 </template>
 <style>
 .update{
   margin-top: 6px;
+}
+
+.pag{
+  margin-top: 20px;
 }
 </style>
 
@@ -24,6 +33,7 @@ import UpdateButton from '@/components/UpdateButton'
 export default {
   data () {
     return {
+      current: 1,
       sort: {
         name: '',
         order: 'asc'
