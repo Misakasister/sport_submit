@@ -104,6 +104,11 @@
         <mu-text-field v-model="list[5].score" label="成绩(请带上单位)" label-float  class="w"></mu-text-field>
       </mu-col>
     </mu-row>
+    <mu-row>
+      <mu-col spn=3 offset=9>
+    <mu-button color="success">提交</mu-button>
+    </mu-col>
+    </mu-row>
   </mu-container>
 </template>
 <style>

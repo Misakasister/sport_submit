@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import SubSchedule from './views/SubSchedule'
 import SubRanking from './views/SubRanking'
+import AlterRanking from './views/AlterRanking'
 Vue.use(Router)
 
 export default new Router({
@@ -16,6 +17,10 @@ export default new Router({
       path: '/subranking',
       name: 'subranking',
       component: SubRanking
+    },{
+      path: '/alterranking',
+      name: 'alterranking',
+      component: AlterRanking
     }
   ]
 })
