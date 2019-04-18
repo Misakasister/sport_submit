@@ -7,11 +7,16 @@
         <td class="is-center">{{scope.row.item}}</td>
         <td class="is-center">{{scope.row.state}}</td>
         <td class="is-center">{{scope.row.time}}</td>
-        <UpdateButton class="update" :tranid="scope.$index"></UpdateButton>
+        <td class="is-center"><mu-button color="secondary" @click="openSimpleDialog">修改</mu-button></td>
       </template>
     </mu-data-table>
   </mu-paper>
-
+<!-- 弹出框 -->
+   <mu-dialog title="Dialog" width="360" :open.sync="openSimple">
+    <UpdateForm></UpdateForm>
+    <mu-button slot="actions" flat color="primary" @click="closeSimpleDialog">Close</mu-button>
+  </mu-dialog>
+<!-- 分页器 -->
   <mu-flex justify-content="center" class="pag">
     <mu-pagination raised circle :total="1000" :current.sync="current"></mu-pagination>
   </mu-flex>
@@ -29,10 +34,11 @@
 </style>
 
 <script>
-import UpdateButton from '@/components/UpdateButton'
+import UpdateForm from '@/components/UpdateForm'
 export default {
   data () {
     return {
+       openSimple: false,
       current: 1,
       sort: {
         name: '',
@@ -67,15 +73,15 @@ export default {
     handleSortChange ({name, order}) {
       this.list = this.list.sort((a, b) => order === 'asc' ? a[name] - b[name] : b[name] - a[name]);
     },
-    tranId:function(el){
-      console.log(el);
+    openSimpleDialog () {
+      this.openSimple = true;
     },
-    ss(){
-      console.log("点击了");
+    closeSimpleDialog () {
+      this.openSimple = false;
     }
   },
   components:{
-    UpdateButton
+    UpdateForm
   }
 };
 </script>

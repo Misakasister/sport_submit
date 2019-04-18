@@ -1,6 +1,7 @@
 //赛程提交表单
 <template>
     <mu-container>
+      <mu-date-input   v-model="value" label="日期" container="bottomSheet" label-float ></mu-date-input><br/>
   <mu-text-field v-model="value2" label="比赛项目" label-float></mu-text-field><br/>
 <mu-select label="状态：决赛或者预赛" v-model="normal.value1">
         <mu-option v-for="option in options" :key="option" :label="option" :value="option"></mu-option>
@@ -23,6 +24,7 @@
 export default {
   data () {
     return {
+     value:null,
      time:null,
      value2:null,
      options: [
@@ -36,9 +38,6 @@ export default {
   },
   components:{
   },
-   mounted:function(){
-      console.log("12312");
-  }
 };
 </script>
 
