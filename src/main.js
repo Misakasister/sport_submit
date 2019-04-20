@@ -5,7 +5,7 @@ import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
 import axios from 'axios';
 Vue.prototype.axios = axios;
-
+Vue.prototype.bus = new Vue();
 Vue.config.productionTip = false
 Vue.use(MuseUI);
 new Vue({

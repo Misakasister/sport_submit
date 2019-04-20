@@ -25,7 +25,6 @@
 </style>
 
 <script>
-
 export default {
   data() {
     return {
@@ -50,26 +49,34 @@ export default {
       this.showflag = false;
     },
     subSche: function() {
-     let subtime=[];
-     let i;
-     for(i=0;i<17;i++){
-       subtime[i]=this.date.toUTCString()[i];
-     }
-     for(i=17;i<=this.time.toUTCString().length;i++){
-        subtime[i]=this.time.toUTCString()[i];
-     }
-      let that=this;
+      let subtime = [];
+      let i;
+      for (i = 0; i < 17; i++) {
+        subtime[i] = this.date.toUTCString()[i];
+      }
+      for (i = 17; i <= this.time.toUTCString().length; i++) {
+        subtime[i] = this.time.toUTCString()[i];
+      }
+      let that = this;
       this.axios
         .post("https://csdn.design/temp/submit", {
-          state:that.state,
-          time:subtime.join(''),
-          item:that.item
+          state: that.state,
+          time: subtime.join(""),
+          item: that.item
         })
         .then(function(response) {
-          console.log(response);
+          //更新表格
+          let flag = true;
+          that.bus.$emit("updata", flag);
+          //还原设置
+          that.state = null;
+          that.time = null;
+          that.item = null;
+          alert("添加成功");
         })
         .catch(function(error) {
           console.log(error);
+          alert("添加失败");
         });
     }
   }

@@ -128,6 +128,7 @@
     width: 220px !important;
 }
 </style>
+
 <script>
 export default {
   data() {
@@ -205,7 +206,7 @@ export default {
           that.college.push(response.data.data[i].name);
         }
       });
-      //挂载项目名
+    //挂载项目名
     this.axios
       .get("https://csdn.design/temp", {})
       .then(function(response) {
