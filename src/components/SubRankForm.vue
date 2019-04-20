@@ -1,7 +1,8 @@
+//项目，学院向后台传送id
 <template>
   <mu-container>
-    <mu-select label="项目名" filterable v-model="filterable.value1" full-width>
-      <mu-option v-for="city in citys" :key="city" :label="city" :value="city"></mu-option>
+    <mu-select label="项目名" filterable v-model="item" full-width>
+      <mu-option v-for="city in items" :key="city" :label="city" :value="city"></mu-option>
     </mu-select>
     <mu-row fluid>
       <mu-col sm="12" md="12" lg="3" xl="3" class="H">
@@ -106,7 +107,7 @@
     </mu-row>
     <mu-row>
       <mu-col spn=3 offset=9>
-    <mu-button color="success">提交</mu-button>
+    <mu-button color="success" @click.stop="submit">提交</mu-button>
     </mu-col>
     </mu-row>
   </mu-container>
@@ -168,27 +169,30 @@ export default {
         score:null,
     }
     ],
-      citys: [
-        "Alabama",
-        "Alaska",
-        "Wyoming"
-      ],
-      value6: null,
-      value7: null,
+      items: [],
       college: [],
-      normal: {
-        value1: "",
-        value2: "",
-        value3: "",
-        value4: "Option 1",
-        value5: "Option 2"
-      },
-      filterable: {
-        value1: "",
-        value2: [],
-        value3: []
-      }
+      item:null,
+      getCollege:[],
     };
+  },
+  methods:{
+    submit:function(){
+      let jsonItem=JSON.stringify(this.item);
+      let jsonScore=JSON.stringify(this.list);
+          console.log(jsonItem);
+          console.log(jsonScore);
+       this.axios
+        .post("https://csdn.design/temp/submit2", {
+          item: jsonItem,
+          list: jsonScore
+        })
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }
   },
   mounted: function() {
     //填载学院名
@@ -200,6 +204,18 @@ export default {
         for (i = 0; i < response.data.data.length; i++) {
           that.college.push(response.data.data[i].name);
         }
+      });
+      //挂载项目名
+    this.axios
+      .get("https://csdn.design/temp", {})
+      .then(function(response) {
+        console.log(response.data);
+        for( i = 0; i<response.data.length;i++){
+          that.items.push(response.data[i].item);
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
       });
   }
 };

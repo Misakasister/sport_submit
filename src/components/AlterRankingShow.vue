@@ -2,12 +2,12 @@
   <mu-container>
     <mu-row>
       <mu-col span="8">
-        <mu-select label="项目名" filterable v-model="filterable.value1" full-width>
-          <mu-option v-for="city in citys" :key="city" :label="city" :value="city"></mu-option>
+        <mu-select label="项目名" filterable v-model="item" full-width>
+          <mu-option v-for="city in items" :key="city" :label="city" :value="city"></mu-option>
         </mu-select>
       </mu-col>
       <mu-col span="4" class="search">
-        <mu-button color="error">查询</mu-button>
+        <mu-button color="error" @click.stop="search">查询</mu-button>
       </mu-col>
     </mu-row>
 
@@ -45,14 +45,10 @@ import AlterRanking from '@/components/AlterRanking'
 export default {
   data() {
     return {
+      item:null,
+      items:[],
       alterId:null,
       openSimple: false,
-      citys: ["Alabama", "Alaska", "Wyoming"],
-      filterable: {
-        value1: "",
-        value2: [],
-        value3: []
-      },
       sort: {
         name: "",
         order: "asc"
@@ -88,44 +84,7 @@ export default {
       
         }
       ],
-      list: [
-        {
-          place:1,
-          college:"建工",
-          name:"xxx",
-          score:"9.6"
-        },
-          {
-          place:1,
-          college:"建工",
-          name:"xxx",
-          score:"9.6"
-        },
-          {
-          place:1,
-          college:"建工",
-          name:"xxx",
-          score:"9.6"
-        },
-  {
-          place:1,
-          college:"建工",
-          name:"xxx",
-          score:"9.6"
-        },
-          {
-          place:1,
-          college:"建工",
-          name:"xxx",
-          score:"9.6"
-        },
-          {
-          place:1,
-          college:"建工",
-          name:"xxx",
-          score:"9.6"
-        }
-      ]
+      list: []
     };
   },
    methods: {
@@ -138,10 +97,37 @@ export default {
     },
     closeSimpleDialog () {
       this.openSimple = false;
+    },
+    search(){
+      let that=this;
+      let str="https://csdn.design/temp/"+this.item;
+       this.axios
+      .get(str, {})
+      .then(function(response) {
+       that.list=response.data;
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
     }
   },
   components:{
     AlterRanking
+  },
+   mounted: function() {
+     let that=this;
+      //挂载项目名
+    this.axios
+      .get("https://csdn.design/temp", {})
+      .then(function(response) {
+        console.log('项目');
+        for(let i = 0; i<response.data.length;i++){
+          that.items.push(response.data[i].id);
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 };
 </script>

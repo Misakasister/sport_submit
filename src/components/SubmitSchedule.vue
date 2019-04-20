@@ -1,7 +1,7 @@
 //赛程提交表单
 <template>
   <mu-container>
-    <mu-date-input v-model="value" label="日期" container="bottomSheet" label-float></mu-date-input>
+    <mu-date-input v-model="date" label="日期" container="bottomSheet" label-float></mu-date-input>
     <br>
     <mu-text-field v-model="item" label="比赛项目" label-float></mu-text-field>
     <br>
@@ -25,13 +25,12 @@
 </style>
 
 <script>
-import { close } from 'fs';
+
 export default {
   data() {
     return {
       item: null,
-      value6: null,
-      value: undefined, //日期
+      date: undefined, //日期
       options: ["决赛", "预赛"],
       state: null,
       time: undefined,
@@ -51,13 +50,19 @@ export default {
       this.showflag = false;
     },
     subSche: function() {
-
-      console.log(this.time.getHours());
+     let subtime=[];
+     let i;
+     for(i=0;i<17;i++){
+       subtime[i]=this.date.toUTCString()[i];
+     }
+     for(i=17;i<=this.time.toUTCString().length;i++){
+        subtime[i]=this.time.toUTCString()[i];
+     }
       let that=this;
       this.axios
         .post("https://csdn.design/temp/submit", {
           state:that.state,
-          time:that.time,
+          time:subtime.join(''),
           item:that.item
         })
         .then(function(response) {
@@ -67,18 +72,7 @@ export default {
           console.log(error);
         });
     }
-  },
-  //  mounted: function() {
-  //   let that=this;
-  //   this.axios.get('https://csdn.design/temp', {
-  // })
-  // .then(function (response) {
-  //   that.list=response.data;
-  // })
-  // .catch(function (error) {
-  //   console.log(error);
-  // });
-  // }
+  }
 };
 </script>
 
