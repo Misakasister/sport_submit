@@ -46,13 +46,19 @@ export default {
   },
   methods: {
     drop: function() {
+      let that = this;
       var str = "https://csdn.design/temp/" + this.alterId + "/delete";
       this.axios
         .get(str, {})
         .then(function(response) {
           console.log(response);
+          alert('删除成功');
+          let flag=true;
+          that.bus.$emit('updata', flag);
+          that.bus.$emit('close',flag);
         })
         .catch(function(error) {
+          alert("删除失败");
           console.log(error);
         });
     },
@@ -61,6 +67,8 @@ export default {
       //时间拼接
       let subtime = [];
       let i;
+      this.date=new Date(this.date);
+      this.time=new Date(this.date);
       for (i = 0; i < 17; i++) {
         subtime[i] = this.date.toUTCString()[i];
       }
@@ -76,9 +84,14 @@ export default {
         })
         .then(function(response) {
           console.log(response);
+          alert("修改成功");
+          let flag=true;
+          that.bus.$emit('close', flag);
+          that.bus.$emit('updata', flag);
         })
         .catch(function(error) {
           console.log(error);
+          alert("修改失败");
         });
     }
   },

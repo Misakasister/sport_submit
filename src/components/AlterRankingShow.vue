@@ -92,7 +92,7 @@ export default {
       this.list = this.list.sort((a, b) => order === 'asc' ? a[name] - b[name] : b[name] - a[name]);
     },
     openSimpleDialog (p) {
-      this.alterId=p;
+      this.alterId=this.list[p].id;
       this.openSimple = true;
     },
     closeSimpleDialog () {
@@ -100,7 +100,8 @@ export default {
     },
     search(){
       let that=this;
-      let str="https://csdn.design/temp/"+this.item;
+      let str="https://csdn.design/temp/place/"+this.item;
+      console.log(str);
        this.axios
       .get(str, {})
       .then(function(response) {
@@ -122,7 +123,7 @@ export default {
       .then(function(response) {
         console.log('项目');
         for(let i = 0; i<response.data.length;i++){
-          that.items.push(response.data[i].id);
+          that.items.push(response.data[i].item);
         }
       })
       .catch(function(error) {

@@ -16,7 +16,7 @@
     </mu-row>
     <mu-row fluid>
       <mu-col span="4" offset="8">
-        <mu-button color="success">修改</mu-button>
+        <mu-button color="success" @click.stop="sub">修改</mu-button>
       </mu-col>
     </mu-row>
   </mu-container>
@@ -32,6 +32,16 @@ export default {
       score: null,
       colleges: []
     };
+  },
+  methods:{
+    sub(){
+      let str="https://csdn.design/temp/schedule/"+this.alterId;
+     this.axios
+      .get(str)
+      .then(function(response) {
+          console.log(response);
+      });
+  }
   },
   mounted: function() {
     //填载学院名

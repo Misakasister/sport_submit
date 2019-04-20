@@ -15,7 +15,7 @@
           <td class="is-center">{{scope.row.state}}</td>
           <td class="is-center">{{scope.row.subtime}}</td>
           <td class="is-center">
-            <mu-button color="secondary" @click="openSimpleDialog(scope.$index)">修改</mu-button>
+            <mu-button color="secondary" @click.stop="openSimpleDialog(scope.$index)">修改</mu-button>
           </td>
         </template>
       </mu-data-table>
@@ -27,7 +27,13 @@
     </mu-dialog>
     <!-- 分页器 -->
     <mu-flex justify-content="center" class="pag">
-      <mu-pagination raised circle :total="length" :current.sync="current" @change="handleSizeChange"></mu-pagination>
+      <mu-pagination
+        raised
+        circle
+        :total="length"
+        :current.sync="current"
+        @change="handleSizeChange"
+      ></mu-pagination>
     </mu-flex>
   </mu-container>
 </template>
@@ -60,11 +66,11 @@ export default {
         { title: "修改", name: "update", align: "center" }
       ],
       list: [],
-      current:1,
-      showListStart:0,
-      showListEnd:10,
-      showList:null,
-      length:null,
+      current: 1,
+      showListStart: 0,
+      showListEnd: 10,
+      showList: null,
+      length: null
     };
   },
   methods: {
@@ -75,25 +81,25 @@ export default {
     },
     openSimpleDialog(id) {
       this.updateId = this.list[id].id;
-        // console.log(this.current);
-        this.openSimple = true;
+      // console.log(this.current);
+      this.openSimple = true;
     },
     closeSimpleDialog() {
       this.openSimple = false;
     },
-    handleSizeChange(){
+    handleSizeChange() {
       console.log(this.current);
       console.log(this.$refs.dom);
-      this.showListStart=(this.current-1)*10;
-      this.showListEnd=this.showListStart+10;
-      this.showList=this.list.slice(this.showListStart,this.showListEnd);
+      this.showListStart = (this.current - 1) * 10;
+      this.showListEnd = this.showListStart + 10;
+      this.showList = this.list.slice(this.showListStart, this.showListEnd);
     }
   },
   components: {
     UpdateForm
   },
   //更新表格的标志
-  created: function() {
+   updated:function() {
     let that = this;
     this.bus.$on("updata", function(flag) {
       if (flag) {
@@ -101,6 +107,12 @@ export default {
           .get("https://csdn.design/temp", {})
           .then(function(response) {
             that.list = response.data;
+            console.log(response.data);
+            console.log(that.list);
+            //时间对象化
+            for (let i = 0; i < that.list.length; i++) {
+              that.list[i].time = new Date(that.list[i].time);
+            }
             //时间排序
             for (let i = 0; i < that.list.length - 1; i++) {
               for (let j = 0; j < that.list.length - 1 - i; j++) {
@@ -123,10 +135,14 @@ export default {
                 year + "-" + month + "-" + day + " " + hour + ":" + min;
               that.list[i].subtime = timestr;
             }
+            that.showList=that.list.slice(that.showListStart, that.showListEnd);
           })
           .catch(function(error) {
             console.log(error);
           });
+        this.bus.$on('close',function(flag){
+      that.openSimple=!flag;
+    })
       }
     });
   },
@@ -136,10 +152,14 @@ export default {
       .get("https://csdn.design/temp", {})
       .then(function(response) {
         that.list = response.data;
+        //时间对象化
+        for (let i = 0; i < that.list.length; i++) {
+          that.list[i].time = new Date(that.list[i].time);
+        }
         //时间排序
         for (let i = 0; i < that.list.length - 1; i++) {
           for (let j = 0; j < that.list.length - 1 - i; j++) {
-            if (that.list[j].time > that.list[j + 1].time) {
+            if (that.list[j].time < that.list[j + 1].time) {
               let t = that.list[j];
               that.list[j] = that.list[j + 1];
               that.list[j + 1] = t;
@@ -148,7 +168,6 @@ export default {
         }
         //时间格式化
         for (let i = 0; i < that.list.length; i++) {
-          that.list[i].time = new Date(that.list[i].time);
           let year = that.list[i].time.getFullYear();
           let month = that.list[i].time.getMonth() + 1;
           let day = that.list[i].time.getDate();
@@ -157,8 +176,8 @@ export default {
           let timestr = year + "-" + month + "-" + day + " " + hour + ":" + min;
           that.list[i].subtime = timestr;
         }
-        that.length=that.list.length;
-        that.showList=that.list.slice(that.showListStart,that.showListEnd);
+        that.length = that.list.length;
+        that.showList = that.list.slice(that.showListStart, that.showListEnd);
       })
       .catch(function(error) {
         console.log(error);
