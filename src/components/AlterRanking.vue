@@ -35,14 +35,28 @@ export default {
   },
   methods:{
     sub(){
-      let str="https://csdn.design/temp/schedule/"+this.alterId;
-     this.axios
-      .get(str)
-      .then(function(response) {
+      let that=this;
+    this.axios
+        .post("https://csdn.design/temp/edit2", {
+          id: that.alterId,
+          name: that.name,
+          college: that.college,
+          score:that.score
+        })
+        .then(function(response) {
           console.log(response);
-      });
-  }
+          alert("修改成功");
+          let flag=true;
+          that.bus.$emit('closerank', flag);
+          that.bus.$emit('updatarank', flag);
+        })
+        .catch(function(error) {
+          console.log(error);
+          alert("修改失败");
+        });
+    }
   },
+
   mounted: function() {
     //填载学院名
     let that = this;
@@ -53,6 +67,18 @@ export default {
         for (i = 0; i < response.data.data.length; i++) {
           that.colleges.push(response.data.data[i].name);
         }
+      });
+      var str="https://csdn.design/temp/score/"+this.alterId;
+       this.axios
+      .get(str, {})
+      .then(function(response) {
+        console.log(response);
+        that.college=response.data[0].college;
+        that.name=response.data[0].name;
+        that.score=response.data[0].score;
+      })
+      .catch(function(error) {
+        console.log(error);
       });
   }
 };

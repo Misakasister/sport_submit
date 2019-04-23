@@ -75,10 +75,11 @@ export default {
       for (i = 17; i <= this.time.toUTCString().length; i++) {
         subtime[i] = this.time.toUTCString()[i];
       }
+      subtime=subtime.join("");
       this.axios
         .post("https://csdn.design/temp/edit", {
           id: that.updateId,
-          time: subtime.join(""),
+          time: subtime,
           state: that.state,
           item: that.item
         })

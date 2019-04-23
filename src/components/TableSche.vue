@@ -136,6 +136,7 @@ export default {
               that.list[i].subtime = timestr;
             }
             that.showList=that.list.slice(that.showListStart, that.showListEnd);
+            that.length=that.list.length;
           })
           .catch(function(error) {
             console.log(error);

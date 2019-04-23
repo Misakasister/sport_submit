@@ -189,9 +189,12 @@ export default {
         })
         .then(function(response) {
           console.log(response);
+          alert("提交成功");
+          location. reload();
         })
         .catch(function(error) {
           console.log(error);
+          alert("提交失败");
         });
     }
   },
@@ -208,7 +211,7 @@ export default {
       });
     //挂载项目名
     this.axios
-      .get("https://csdn.design/temp", {})
+      .get("https://csdn.design/temp/notice", {})
       .then(function(response) {
         console.log(response.data);
         for( i = 0; i<response.data.length;i++){

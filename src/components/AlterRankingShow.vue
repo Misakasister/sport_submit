@@ -12,23 +12,22 @@
     </mu-row>
 
     <mu-paper :z-depth="1">
-      <mu-data-table
-        :columns="columns"
-        :data="list.slice(0, 6)"
-      >
+      <mu-data-table :columns="columns" :data="list.slice(0, 6)">
         <template slot-scope="scope">
           <td class="is-center">{{scope.row.place}}</td>
           <td class="is-center">{{scope.row.college}}</td>
           <td class="is-center">{{scope.row.name}}</td>
           <td class="is-center">{{scope.row.score}}</td>
-          <td class="is-center"><mu-button color="secondary" @click="openSimpleDialog(scope.$index)">修改</mu-button></td>
+          <td class="is-center">
+            <mu-button color="secondary" @click="openSimpleDialog(scope.$index)">修改</mu-button>
+          </td>
         </template>
       </mu-data-table>
     </mu-paper>
-     <mu-dialog title="Dialog" width="360" :open.sync="openSimple">
-    <AlterRanking :alterId='alterId'></AlterRanking>
-    <mu-button slot="actions" flat color="primary" @click="closeSimpleDialog">Close</mu-button>
-  </mu-dialog>
+    <mu-dialog title="Dialog" width="360" :open.sync="openSimple">
+      <AlterRanking :alterId="alterId"></AlterRanking>
+      <mu-button slot="actions" flat color="primary" @click="closeSimpleDialog">Close</mu-button>
+    </mu-dialog>
   </mu-container>
 </template>
 <style>
@@ -41,13 +40,13 @@
 </style>
 
 <script>
-import AlterRanking from '@/components/AlterRanking'
+import AlterRanking from "@/components/AlterRanking";
 export default {
   data() {
     return {
-      item:null,
-      items:[],
-      alterId:null,
+      item: null,
+      items: [],
+      alterId: null,
       openSimple: false,
       sort: {
         name: "",
@@ -57,72 +56,87 @@ export default {
         {
           title: "名次",
           name: "place",
-          align: "center",
+          align: "center"
         },
         {
           title: "学院",
           name: "college",
-          align: "center",
-     
+          align: "center"
         },
         {
           title: "姓名",
           name: "name",
-          align: "center",
-      
+          align: "center"
         },
         {
           title: "成绩",
           name: "score",
-          align: "center",
-      
+          align: "center"
         },
         {
           title: "修改",
           name: "alter",
-          align: "center",
-      
+          align: "center"
         }
       ],
       list: []
     };
   },
-   methods: {
-      handleSortChange ({name, order}) {
-      this.list = this.list.sort((a, b) => order === 'asc' ? a[name] - b[name] : b[name] - a[name]);
+  methods: {
+    handleSortChange({ name, order }) {
+      this.list = this.list.sort((a, b) =>
+        order === "asc" ? a[name] - b[name] : b[name] - a[name]
+      );
     },
-    openSimpleDialog (p) {
-      this.alterId=this.list[p].id;
+    openSimpleDialog(p) {
+      this.alterId = this.list[p].id;
       this.openSimple = true;
     },
-    closeSimpleDialog () {
+    closeSimpleDialog() {
       this.openSimple = false;
     },
-    search(){
-      let that=this;
-      let str="https://csdn.design/temp/place/"+this.item;
+    search() {
+      let that = this;
+      let str = "https://csdn.design/temp/place/" + this.item;
       console.log(str);
-       this.axios
-      .get(str, {})
-      .then(function(response) {
-       that.list=response.data;
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+      this.axios
+        .get(str, {})
+        .then(function(response) {
+          that.list = response.data;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   },
-  components:{
+  components: {
     AlterRanking
   },
-   mounted: function() {
-     let that=this;
-      //挂载项目名
+  updated: function() {
+    let that = this;
+    this.bus.$on("closerank", function(flag) {
+      that.openSimple = !flag;
+      if (flag) {
+        let str = "https://csdn.design/temp/place/" + that.item;
+        console.log(str);
+        that.axios
+          .get(str, {})
+          .then(function(response) {
+            that.list = response.data;
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+    });
+  },
+  mounted: function() {
+    let that = this;
+    //挂载项目名
     this.axios
-      .get("https://csdn.design/temp", {})
+      .get("https://csdn.design/temp/notice", {})
       .then(function(response) {
-        console.log('项目');
-        for(let i = 0; i<response.data.length;i++){
+        for (let i = 0; i < response.data.length; i++) {
           that.items.push(response.data[i].item);
         }
       })
